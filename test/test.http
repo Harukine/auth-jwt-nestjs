@@ -1,0 +1,10 @@
+### Send POST request with json body
+POST http://localhost:3000/auth/local/signup
+Content-Type: application/json
+
+{
+  "email": "email",
+  "password": "password"
+}
+
+###
