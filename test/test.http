@@ -1,4 +1,4 @@
-### Send POST request with json body
+### Send POST request to create a user
 POST http://localhost:3000/auth/local/signup
 Content-Type: application/json
 
@@ -7,4 +7,11 @@ Content-Type: application/json
   "password": "password"
 }
 
-###
+### Send POST request sign in a user
+POST http://localhost:3000/auth/local/signin
+Content-Type: application/json
+
+{
+  "email": "email",
+  "password": "password"
+}
