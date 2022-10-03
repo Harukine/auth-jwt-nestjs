@@ -4,14 +4,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
-import { Request } from 'express';
 import { AtGuard, RtGuard } from '../guards';
+import { GetCurrentUser, GetCurrentUserId } from '../decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -32,16 +31,14 @@ export class AuthController {
   @UseGuards(AtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  logout(@Req() req: Request) {
-    const user = req.user;
-    return this.authService.logout(user['sub']);
+  logout(@GetCurrentUserId() userId: number): Promise<void> {
+    return this.authService.logout(userId);
   }
 
   @UseGuards(RtGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
-  refresh(@Req() req: Request) {
-    const user = req.user;
+  refresh(@GetCurrentUser() user) {
     return this.authService.refreshToken(user['sub'], user['refreshToken']);
   }
 }
