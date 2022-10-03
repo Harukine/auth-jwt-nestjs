@@ -18,7 +18,10 @@ Content-Type: application/json
 
 ### Send POST request to logout a user
 POST http://localhost:3000/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsImVtYWlsIjoiZW1haWwiLCJpYXQiOjE2NjQzOTYxMDYsImV4cCI6MTY2NDM5NzAwNn0.0XgLPzl_0QfJ5wmPIUk4H8f4QqirHdvdIIuNzYh4aK4
+Authorization: Bearer {{$jwt}}
 Content-Type: application/json
 
-
+### Send POST request to refresh token
+POST http://localhost:3000/auth/refresh
+Authorization: Bearer {{$jwt}}
+Content-Type: application/json
