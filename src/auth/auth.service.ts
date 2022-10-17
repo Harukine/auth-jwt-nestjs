@@ -25,9 +25,7 @@ export class AuthService {
       },
     });
 
-    const tokens = await this.getTokens(newUser);
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
-    return tokens;
+    return this.getTokensAndUpdateRtHash(newUser);
   }
 
   async signinLocal(dto: AuthDto): Promise<Tokens> {
@@ -42,12 +40,10 @@ export class AuthService {
     const passwordMatches = await bcrypt.compare(dto.password, user.hash);
     if (!passwordMatches) throw new ForbiddenException('Access Denied');
 
-    const tokens = await this.getTokens(user);
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    return tokens;
+    return this.getTokensAndUpdateRtHash(user);
   }
 
-  async logout(userId: number) {
+  async logout(userId: number): Promise<boolean> {
     await this.prisma.user.updateMany({
       where: {
         id: userId,
@@ -59,6 +55,7 @@ export class AuthService {
         hashedRt: null,
       },
     });
+    return true;
   }
 
   async refreshToken(userId: number, rt: string) {
@@ -71,9 +68,7 @@ export class AuthService {
     const rtMatches = await bcrypt.compare(rt, user.hashedRt);
     if (!rtMatches) throw new ForbiddenException('Access Denied');
 
-    const tokens = await this.getTokens(user);
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    return tokens;
+    return this.getTokensAndUpdateRtHash(user);
   }
 
   hashData(data: string) {
